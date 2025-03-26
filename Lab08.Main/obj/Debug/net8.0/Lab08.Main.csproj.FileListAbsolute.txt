@@ -1,0 +1,6 @@
+C:\Users\caleb\my-code-dir-2\lab-8-fountain-of-objects-2-starlink200\Lab08.Main\obj\Debug\net8.0\Lab08.Main.csproj.AssemblyReference.cache
+C:\Users\caleb\my-code-dir-2\lab-8-fountain-of-objects-2-starlink200\Lab08.Main\obj\Debug\net8.0\Lab08.Main.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\caleb\my-code-dir-2\lab-8-fountain-of-objects-2-starlink200\Lab08.Main\obj\Debug\net8.0\Lab08.Main.AssemblyInfoInputs.cache
+C:\Users\caleb\my-code-dir-2\lab-8-fountain-of-objects-2-starlink200\Lab08.Main\obj\Debug\net8.0\Lab08.Main.AssemblyInfo.cs
+C:\Users\caleb\my-code-dir-2\lab-8-fountain-of-objects-2-starlink200\Lab08.Main\obj\Debug\net8.0\Lab08.Main.csproj.CoreCompileInputs.cache
+C:\Users\caleb\my-code-dir-2\lab-8-fountain-of-objects-2-starlink200\Lab08.Main\obj\Debug\net8.0\Lab08.Main.sourcelink.json
