@@ -101,9 +101,9 @@ public class PlayGame
         {
             Console.WriteLine("You see light in this room coming from outside the cavern. This is the entrance.");
         }
-        else if (CheckForPit())
+        else if (CheckForMaelstrom())
         {
-            Console.WriteLine("You feel a draft coming from a close room. A pit is nearby");
+            Console.WriteLine("You hear the growling and groaning of a maelstrom nearby.");
         }
         else
         {
@@ -123,14 +123,14 @@ public class PlayGame
         }
     }
 
-    public bool CheckForPit()
+    public bool CheckForMaelstrom()
     {
         int[,] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
         for (int i = 0; i < directions.Length / 2; i++)
         {
             int newX = Index.X + directions[i, 0];
             int newY = Index.Y + directions[i, 1];
-            if (newX > 0 && newX < Map.MapSize - 1 && newY > 0 && newY < Map.MapSize - 1 && Map.Rooms[newX, newY] is PitRoom)
+            if (newX > 0 && newX < Map.MapSize - 1 && newY > 0 && newY < Map.MapSize - 1 && Map.Rooms[newX, newY].monster is Maelstrom)
             {
                 return true;
             }
@@ -145,17 +145,23 @@ public class PlayGame
             Console.Clear();
             Map.DisplayMap(Index.X, Index.Y);
             Console.WriteLine($"Player HP: {player.Health}");
-            Console.WriteLine($"Monster HP: {Map.Rooms[Index.X, Index.Y].monster.Health}");
+            Console.WriteLine($"{Map.Rooms[Index.X, Index.Y].monster.Name} HP: {Map.Rooms[Index.X, Index.Y].monster.Health}");
             switch(PlayerOptions())
             {
                 case 1:
-                    player.Health = player.Health - Map.Rooms[Index.X, Index.Y].monster.weapon.Damage;
-                    Map.Rooms[Index.X, Index.Y].monster.Health = Map.Rooms[Index.X, Index.Y].monster.Health - player.weapon.Damage;
+                    if(player.weapon.StrengthEnhance + rand.Next(20) >= Map.Rooms[Index.X, Index.Y].monster.ArmorClass)
+                    {
+                        player.Health = player.Health - Map.Rooms[Index.X, Index.Y].monster.weapon.Damage;
+                    }
+                    if(rand.Next(20) + Map.Rooms[Index.X, Index.Y].monster.weapon.StrengthEnhance >= player.ArmorClass)
+                    {
+                        Map.Rooms[Index.X, Index.Y].monster.Health = Map.Rooms[Index.X, Index.Y].monster.Health - player.weapon.Damage;
+                    }
                     break;
                 case 2:
                     break;
                 case 3:
-                    player.Heal();
+                    player.DisplayPotionList();
                     break;
             }
         }
@@ -168,11 +174,15 @@ public class PlayGame
 
     }
 
+
+
     public int PlayerOptions()
     {
-        Console.WriteLine("What would you like to do? 1: Attack 2: Dodge 3: Heal");
-        return ValidateAnswer(3);
+        Console.WriteLine("What would you like to do? 1: Attack 2: Dodge 3: Drink Potion");
+        return player.ValidateAnswer(3);
     }
+
+    
 
     public void Loot()
     {
@@ -181,27 +191,11 @@ public class PlayGame
         Map.Rooms[Index.X, Index.Y].monster.potions.Remove( Map.Rooms[Index.X, Index.Y].monster.potions[0]);
         Console.WriteLine($"Would you like a { Map.Rooms[Index.X, Index.Y].monster.weapon.Name}? 1: Yes 2: No");
         Console.WriteLine($"It does { Map.Rooms[Index.X, Index.Y].monster.weapon.Damage} damage, and enhances your strength by { Map.Rooms[Index.X, Index.Y].monster.weapon.Damage}.");
-        if(ValidateAnswer(2) == 1)
+        if(player.ValidateAnswer(2) == 1)
         {
             player.weapon = Map.Rooms[Index.X, Index.Y].monster.weapon;
             Map.Rooms[Index.X, Index.Y].monster.weapon = new NoWeapon();
         }
-    }
-
-    public int ValidateAnswer(int max)
-    {
-        int num;
-        bool isValid;
-        do
-        {
-            isValid = int.TryParse(Console.ReadLine(), out num);
-            if(num < 1 || num > max)
-            {
-                isValid = false;
-            }
-        }
-        while(!isValid);
-        return num;
     }
 
     
@@ -262,6 +256,7 @@ public class PlayGame
 
     public void DisplayEndGame()
     {
+        Map.DisplayMap(Index.X, Index.Y);
         if (Win)
         {
             Console.WriteLine("Congratulations! You found the Fountain of Objects");

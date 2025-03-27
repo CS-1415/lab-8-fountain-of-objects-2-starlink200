@@ -5,7 +5,6 @@ public class Monster : ICharacter
     public Weapon weapon {get; set;}
     public List<Potion> potions {get; set;}
     public int ArmorClass {get; set;}
-    public int Strength {get; set;}
     public Monster()
     {
         Name = "";
