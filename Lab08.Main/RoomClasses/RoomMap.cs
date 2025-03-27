@@ -48,6 +48,16 @@ public class RoomMap
                 count++;
             }
         }
+        if(!Rooms[MapSize-1, MapSize-1].HasFountain)
+        {
+            Rooms[MapSize-1, 0].monster = new Boss();
+            Rooms[MapSize-1, 0].HasMonster = true;
+        }
+        else
+        {
+            Rooms[MapSize-1, 1].monster = new Boss();
+            Rooms[MapSize-1, 1].HasMonster = true;
+        }
     }
 
 //PickMonsterRoom() will be the method deciding if a room has a monster, there is a 1/4 chance that a room has a monster

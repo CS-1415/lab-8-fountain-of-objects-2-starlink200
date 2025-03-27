@@ -174,15 +174,11 @@ public class PlayGame
 
     }
 
-
-
     public int PlayerOptions()
     {
         Console.WriteLine("What would you like to do? 1: Attack 2: Dodge 3: Drink Potion");
         return player.ValidateAnswer(3);
     }
-
-    
 
     public void Loot()
     {
@@ -198,7 +194,6 @@ public class PlayGame
         }
     }
 
-    
     public void MaelstromCombat()
     {
         int chanceItFlees = rand.Next(3);

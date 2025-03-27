@@ -70,6 +70,7 @@ public class Player : ICharacter
         Console.WriteLine($"{strengthCount}x Strength Potion(s)");
         Console.WriteLine($"{healCount}x Heal Potion(s)");
         Console.WriteLine($"{highHealCount}x High Heal Potions");
+        ChoosePotion();
     }
 
     public void ChoosePotion()
