@@ -1,36 +1,13 @@
-public class Maelstrom : Monster, Character
+public class Maelstrom : Monster
 {
     public Maelstrom()
     {
+        Name = "Maelstrom";
         Health = 20;
         ArmorClass = 10;
         Strength = 10;
-
+        weapon = new NoWeapon();
+        potions = new List<Potion>();
     }
 
-    public int Health
-    {
-        get {return Health;}
-
-        set {Health = value;}
-    }
-
-    public int ArmorClass
-    {
-        get {return ArmorClass;}
-        
-        set {ArmorClass = value;}
-    }
-
-    public int Strength
-    {
-        get {return Strength;}
-
-        set {Strength = value;}
-    }
-
-    public override void Attack()
-    {
-        
-    }
 }

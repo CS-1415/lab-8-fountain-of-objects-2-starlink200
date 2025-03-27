@@ -1,3 +1,6 @@
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
+
 public class RoomMap
 {
     Random rand = new Random();
@@ -21,70 +24,55 @@ public class RoomMap
 
     public void MakeMap()
     {
+        int FountainRoom = rand.Next((MapSize * MapSize)/2, MapSize * MapSize);
         int count = 0;
-        int MaelStromRoom = PickRandNum();
-        int AmarokRoom = PickRandNum();
-        int PitRoom = PickRandNum();
-        int FountainRoom = PickRandNum();
-
         for(int i = 0; i < MapSize; i++)
         {
             for(int j = 0; j < MapSize; j++)
             {
-                if(count == MaelStromRoom)
+                Rooms[i,j] = new Room();
+                if(PickMonsterRoom() && i != 0 && j != 0)
                 {
-                    Rooms[i,j] = new MonsterRoom<Maelstrom>(new Maelstrom());
-                }
-                else if(count == AmarokRoom)
-                {
-                    Rooms[i,j] = new MonsterRoom<Amarok>(new Amarok());
+                    Rooms[i,j].monster = PickMonsterType();
+                    Rooms[i,j].HasMonster = true;
+                    Rooms[i,j].monster.potions.Add(new Potion());
                 }
                 else if(count == FountainRoom)
                 {
-                    Rooms[i,j] = new FountainRoom();
-                }
-                else if(count == PitRoom)
-                {
-                    Rooms[i,j] = new PitRoom();
+                    Rooms[i,j].HasFountain = true;
                 }
                 else
                 {
-                    Rooms[i,j] = new Room();
+                    Rooms[i,j].HasMonster = false;
                 }
-                count++;
             }
         }
     }
 
-    public void MoveMaelstrom(int xIndex, int yIndex)
+//PickMonsterRoom() will be the method deciding if a room has a monster, there is a 1/4 chance that a room has a monster
+    public bool PickMonsterRoom()
     {
-        Rooms[xIndex,yIndex] = new Room();
-        if(xIndex - 2 >= 0 )
+        int num = rand.Next(4);
+        int num2 = 1;
+        if(num == num2)
         {
-            xIndex -= 2;
+            return true;
         }
-        else
-        {
-            xIndex = 0 + xIndex + 2;
-        }
-
-        // if(yIndex + 1 < MapSize)
-        // {
-        //     yIndex ++;
-        // }
-        // else
-        // {
-        //     yIndex = yIndex -MapSize + 1;
-        // }
-        Rooms[xIndex,yIndex] = new MonsterRoom<Maelstrom>();
-        
-
+        return false;
     }
 
-    int PickRandNum()
+//PickMonsterType() picks what kind of monster will be in the monster room, equal chance of any monster
+    public Monster PickMonsterType()
     {
-        
-        return rand.Next(MapSize*MapSize/2, MapSize * MapSize);
+        int num = rand.Next(4);
+        switch (num)
+        {
+            case 1:
+            case 3:
+                return new Amarok();
+            default:
+                return new Maelstrom();
+        }
     }
 
     public void DisplayMap(int xIndex, int yIndex)

@@ -4,17 +4,24 @@ using Microsoft.VisualBasic;
 public class Room
 {
     public bool Entered {get; set;}
+    public bool HasFountain;
+    public bool HasMonster;
+    public Monster monster;
 
     public Room ()
     {
-
+        
     }
 
     public void PrintRoom(int x, int y, string characterSprite)
     {
-        if(!Entered)
+        if(!Entered || HasMonster)
         {
             Console.ForegroundColor = ConsoleColor.Red;
+        }
+        else if(Entered && HasFountain)
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
         }
         else
         {
