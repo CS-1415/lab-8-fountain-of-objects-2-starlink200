@@ -18,13 +18,12 @@ public class Player : ICharacter
         
     }
     
-    public int Strengthen()
+    public void Strengthen()
     {
         if(potions.Contains(new StrengthPotion()))
         {
-            return new StrengthPotion().Potency;
+            weapon.StrengthEnhance += new StrengthPotion().Potency;
         }
-        return 0;
     }
 
     public void Heal()

@@ -6,7 +6,6 @@ public class Maelstrom : Monster
         Health = 20;
         ArmorClass = 10;
         weapon = new NoWeapon();
-        potions = new List<Potion>();
     }
 
 }

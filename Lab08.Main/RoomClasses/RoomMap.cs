@@ -35,7 +35,7 @@ public class RoomMap
                 {
                     Rooms[i,j].monster = PickMonsterType();
                     Rooms[i,j].HasMonster = true;
-                    Rooms[i,j].monster.potions.Add(new Potion());
+                    Rooms[i,j].monster.potions.Add(PickMonsterPotion());
                 }
                 else if(count == FountainRoom)
                 {
@@ -76,6 +76,21 @@ public class RoomMap
         }
     }
 
+    public Potion PickMonsterPotion()
+    {
+        int num = rand.Next(10);
+        switch(num)
+        {
+            case 1:
+                return new HighHealPotion();
+            case 2:
+            case 3:
+            case 4:
+                return new StrengthPotion();
+            default:
+                return new HealPotion();
+        }
+    }
     public void DisplayMap(int xIndex, int yIndex)
     {
         for(int i = 0; i < MapSize; i++)
