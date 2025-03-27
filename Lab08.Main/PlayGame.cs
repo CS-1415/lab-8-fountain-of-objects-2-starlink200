@@ -139,58 +139,107 @@ public class PlayGame
     }
     public void Combat()
     {
-
-        while (player.Health > 0 && Map.Rooms[Index.X, Index.Y].monster.Health > 0)
+        (int x, int y) tempIndex = (Index.X, Index.Y);
+        bool fled = false;
+        while (player.Health > 0 && Map.Rooms[tempIndex.x, tempIndex.y].monster.Health > 0 && !fled)
         {
             Console.Clear();
             Map.DisplayMap(Index.X, Index.Y);
             Console.WriteLine($"Player HP: {player.Health}");
             Console.WriteLine($"{Map.Rooms[Index.X, Index.Y].monster.Name} HP: {Map.Rooms[Index.X, Index.Y].monster.Health}");
-            switch(PlayerOptions())
+            Console.WriteLine("What would you like to do? 1: Attack 2: Flee 3: Drink Potion");
+            switch (player.ValidateAnswer(3))
             {
                 case 1:
-                    if(player.weapon.StrengthEnhance + rand.Next(20) >= Map.Rooms[Index.X, Index.Y].monster.ArmorClass)
+                    if (player.weapon.StrengthEnhance + rand.Next(20) >= Map.Rooms[Index.X, Index.Y].monster.ArmorClass)
                     {
                         player.Health = player.Health - Map.Rooms[Index.X, Index.Y].monster.weapon.Damage;
                     }
-                    if(rand.Next(20) + Map.Rooms[Index.X, Index.Y].monster.weapon.StrengthEnhance >= player.ArmorClass)
+                    if (rand.Next(20) + Map.Rooms[Index.X, Index.Y].monster.weapon.StrengthEnhance >= player.ArmorClass)
                     {
                         Map.Rooms[Index.X, Index.Y].monster.Health = Map.Rooms[Index.X, Index.Y].monster.Health - player.weapon.Damage;
                     }
                     break;
                 case 2:
+                    Flee();
+                    fled = true;
                     break;
                 case 3:
                     player.DisplayPotionList();
                     break;
             }
         }
-        if (Map.Rooms[Index.X, Index.Y].monster.Health <= 0)
+        if (Map.Rooms[tempIndex.x, tempIndex.y].monster.Health <= 0)
         {
-            Map.Rooms[Index.X, Index.Y].HasMonster = false;
-            Console.WriteLine($"You killed the {Map.Rooms[Index.X, Index.Y].monster.Name}");
+            Map.Rooms[tempIndex.x, tempIndex.y].HasMonster = false;
+            Console.WriteLine($"You killed the {Map.Rooms[tempIndex.x, tempIndex.y].monster.Name}");
             Loot();
         }
-
     }
 
-    public int PlayerOptions()
+    //If a player flees from combat they will randomly be put into one of the adjacent rooms to where they just were
+    public void Flee()
     {
-        Console.WriteLine("What would you like to do? 1: Attack 2: Dodge 3: Drink Potion");
-        return player.ValidateAnswer(3);
+        int num = rand.Next(4);
+        switch (num)
+        {
+            case 1:
+                if (Index.X + 1 < Map.MapSize)
+                {
+                    Index.X++;
+                }
+                else
+                {
+                    Index.X = Index.X - Map.MapSize + 1;
+                }
+                break;
+            case 2:
+                if (Index.Y + 1 < Map.MapSize)
+                {
+                    Index.Y++;
+                }
+                else
+                {
+                    Index.Y = Index.Y - Map.MapSize + 1;
+                }
+                break;
+            case 3:
+                if (Index.Y - 1 >= 0)
+                {
+                    Index.Y--;
+                }
+                else
+                {
+                    Index.Y = 0 + Index.Y + 1;
+                }
+                break;
+            case 4:
+                if (Index.X - 1 >= 0)
+                {
+                    Index.X--;
+                }
+                else
+                {
+                    Index.X = 0 + Index.X + 1;
+                }
+                break;
+        }
+        CheckforEndCondition();
     }
-
     public void Loot()
     {
         //player automatically get the monsters potion
         player.potions.Add(new Potion());
-        Map.Rooms[Index.X, Index.Y].monster.potions.Remove( Map.Rooms[Index.X, Index.Y].monster.potions[0]);
-        Console.WriteLine($"Would you like a { Map.Rooms[Index.X, Index.Y].monster.weapon.Name}? 1: Yes 2: No");
-        Console.WriteLine($"It does { Map.Rooms[Index.X, Index.Y].monster.weapon.Damage} damage, and enhances your strength by { Map.Rooms[Index.X, Index.Y].monster.weapon.Damage}.");
-        if(player.ValidateAnswer(2) == 1)
+        Map.Rooms[Index.X, Index.Y].monster.potions.Remove(Map.Rooms[Index.X, Index.Y].monster.potions[0]);
+        if (!player.weapon.Equals(Map.Rooms[Index.X, Index.Y].monster.weapon))
         {
-            player.weapon = Map.Rooms[Index.X, Index.Y].monster.weapon;
-            Map.Rooms[Index.X, Index.Y].monster.weapon = new NoWeapon();
+            Console.WriteLine($"Would you like a {Map.Rooms[Index.X, Index.Y].monster.weapon.Name}? 1: Yes 2: No");
+            Console.WriteLine($"It does {Map.Rooms[Index.X, Index.Y].monster.weapon.Damage} damage, and enhances your strength by {Map.Rooms[Index.X, Index.Y].monster.weapon.Damage}.");
+            if (player.ValidateAnswer(2) == 1)
+            {
+                player.weapon = Map.Rooms[Index.X, Index.Y].monster.weapon;
+                Map.Rooms[Index.X, Index.Y].monster.weapon = new NoWeapon();
+            }
         }
     }
 
@@ -222,6 +271,7 @@ public class PlayGame
         {
             Combat();
         }
+        CheckforEndCondition();
     }
     public void MoveMaelstrom()
     {
@@ -251,6 +301,7 @@ public class PlayGame
 
     public void DisplayEndGame()
     {
+        Console.Clear();
         Map.DisplayMap(Index.X, Index.Y);
         if (Win)
         {
