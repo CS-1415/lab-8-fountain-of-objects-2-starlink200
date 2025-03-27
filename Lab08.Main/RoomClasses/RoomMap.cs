@@ -45,6 +45,7 @@ public class RoomMap
                 {
                     Rooms[i,j].HasMonster = false;
                 }
+                count++;
             }
         }
     }
