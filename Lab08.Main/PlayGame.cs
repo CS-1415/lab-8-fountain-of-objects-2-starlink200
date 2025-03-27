@@ -35,7 +35,6 @@ public class PlayGame
         }
         DisplayEndGame();
     }
-
     public void Move()
     {
 
@@ -71,7 +70,6 @@ public class PlayGame
 
 
     }
-
     public void CheckforEndCondition()
     {
         if (Map.Rooms[Index.X, Index.Y].HasFountain)
@@ -122,7 +120,6 @@ public class PlayGame
             }
         }
     }
-
     public bool CheckForMaelstrom()
     {
         int[,] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
@@ -242,7 +239,6 @@ public class PlayGame
             }
         }
     }
-
     public void MaelstromCombat()
     {
         int chanceItFlees = rand.Next(3);
@@ -298,7 +294,6 @@ public class PlayGame
 
 
     }
-
     public void DisplayEndGame()
     {
         Console.Clear();
